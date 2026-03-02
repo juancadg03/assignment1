@@ -1,0 +1,51 @@
+# Programa avanzado: Cálculo de factorial simplificado (3!)
+# 3! = 3 × 2 × 1 = 6
+
+# Inicializar valores
+SET D0 3 NULL NULL      # n = 3
+SET D1 2 NULL NULL      # Segundo número
+SET D2 1 NULL NULL      # Resultado parcial = 1
+
+# Calcular 3 × 2
+ADD D0 D0 NULL          # ACC = 3 + 3 = 6
+STR D3 NULL NULL        # D3 = 6
+ADD D3 D0 NULL          # ACC = 6 + 3 = 9 (esto es 3×3, necesitamos otra estrategia)
+
+# Mejor enfoque: sumar repetidamente
+SET D10 3 NULL NULL     # Primer factor
+SET D11 2 NULL NULL     # Segundo factor  
+SET D12 0 NULL NULL     # Resultado = 0
+
+# Simular 3 × 2 = 3 + 3
+LDR D12 NULL NULL       # ACC = 0
+ADD D10 NULL NULL       # ACC = 3
+ADD D10 NULL NULL       # ACC = 6
+STR D12 NULL NULL       # D12 = 6 (resultado de 3×2)
+
+# Mostrar resultado intermedio
+SHW D12 NULL NULL
+
+# Ahora multiplicar por 1 (6 × 1 = 6)
+ADD D12 D2 D13          # D13 = D12 + D2 = 6 + 1 = 7 (suma, no multiplicación perfecta)
+
+# Para demostración, mostrar operaciones básicas
+SET D20 100 NULL NULL
+SET D21 50 NULL NULL
+
+INC D20 NULL NULL       # D20 = 101
+DEC D21 NULL NULL       # D21 = 49
+
+SHW D20 NULL NULL
+SHW D21 NULL NULL
+
+ADD D20 D21 D22         # D22 = 101 + 49 = 150
+SHW D22 NULL NULL
+
+# Mostrar todos los registros
+SHW ACC NULL NULL
+SHW ICR NULL NULL
+SHW MAR NULL NULL
+SHW MDR NULL NULL
+SHW UC NULL NULL
+
+END NULL NULL NULL

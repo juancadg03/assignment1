@@ -1,0 +1,48 @@
+# Programa de ejemplo para el simulador de CPU
+# Este programa demuestra todas las instrucciones disponibles
+
+# Cargar valores iniciales en memoria
+SET D0 10 NULL NULL
+SET D1 20 NULL NULL
+SET D2 5 NULL NULL
+SET D3 100 NULL NULL
+
+# Cargar valor en el acumulador
+LDR D0 NULL NULL
+SHW ACC NULL NULL
+
+# Sumar valor de D1 al acumulador
+ADD D1 NULL NULL
+SHW ACC NULL NULL
+
+# Guardar resultado en D4
+STR D4 NULL NULL
+SHW D4 NULL NULL
+
+# Sumar D0 + D1 y cargar en acumulador
+ADD D0 D1 NULL
+SHW ACC NULL NULL
+
+# Sumar D0 + D2 y guardar en D5
+ADD D0 D2 D5
+SHW D5 NULL NULL
+
+# Incrementar valor en D2
+INC D2 NULL NULL
+SHW D2 NULL NULL
+
+# Decrementar valor en D3
+DEC D3 NULL NULL
+SHW D3 NULL NULL
+
+# Pausar para inspeccionar
+PAUSE NULL NULL NULL
+
+# Mostrar registros individuales
+SHW ICR NULL NULL
+SHW MAR NULL NULL
+SHW MDR NULL NULL
+SHW UC NULL NULL
+
+# Terminar programa
+END NULL NULL NULL
