@@ -5,9 +5,7 @@
 
 using namespace std;
 
-CPU::CPU() : paused(false) {}
-
-// ==================== MÉTODOS AUXILIARES ====================
+CPU::CPU() {}
 
 int CPU::parseAddress(const string& addr) {
     int result = -1;
@@ -17,31 +15,21 @@ int CPU::parseAddress(const string& addr) {
     return result;
 }
 
-bool CPU::isImmediate(const string& operand) {
-    bool result = false;
+int CPU::getValue(const string& operand) {
+    int result = 0;
     if (operand != "NULL" && !operand.empty()) {
         try {
-            stoi(operand);
-            result = true;
+            result = stoi(operand);
         } catch (...) {
-            result = false;
+            if (operand[0] == 'D') {
+                int addr = parseAddress(operand);
+                result = memory.read(addr);
+            }
         }
     }
     return result;
 }
 
-int CPU::getValue(const string& operand) {
-    int result = 0;
-    if (isImmediate(operand)) {
-        result = stoi(operand);
-    } else if (operand[0] == 'D') {
-        int addr = parseAddress(operand);
-        result = memory.read(addr);
-    }
-    return result;
-}
-
-// ==================== CARGAR INSTRUCCIONES ====================
 
 bool CPU::loadInstructions(const string& filename) {
     bool success = false;
@@ -52,13 +40,11 @@ bool CPU::loadInstructions(const string& filename) {
         bool endFound = false;
         
         while (getline(file, line) && !endFound) {
-            // Eliminar espacios en blanco al inicio y final
             size_t start = line.find_first_not_of(" \t\r\n");
             if (start != string::npos) {
                 size_t end = line.find_last_not_of(" \t\r\n");
                 line = line.substr(start, end - start + 1);
                 
-                // Ignorar líneas vacías y comentarios
                 if (!line.empty() && line[0] != '#') {
                     istringstream iss(line);
                     Instruction inst;
@@ -82,7 +68,6 @@ bool CPU::loadInstructions(const string& filename) {
     return success;
 }
 
-// ==================== CICLO DE INSTRUCCIÓN ====================
 
 void CPU::fetch() {
     cu.setState("FETCH");
@@ -121,8 +106,6 @@ void CPU::execute() {
             executeSTR(inst);
         } else if (inst.opcode == "SHW") {
             executeSHW(inst);
-        } else if (inst.opcode == "PAUSE") {
-            executePAUSE(inst);
         } else if (inst.opcode == "END") {
             cu.setState("HALTED");
         } else {
@@ -135,7 +118,6 @@ void CPU::execute() {
     }
 }
 
-// ==================== IMPLEMENTACIÓN DE INSTRUCCIONES ====================
 
 void CPU::executeSET(Instruction& inst) {
     int addr = parseAddress(inst.operand1);
@@ -225,49 +207,13 @@ void CPU::executeSHW(Instruction& inst) {
     }
 }
 
-void CPU::executePAUSE(Instruction& inst) {
-    cu.setState("PAUSED");
-    paused = true;
-}
-
-// ==================== CONTROL DE EJECUCIÓN ====================
-
 void CPU::run() {
     pc.reset();
     cu.reset();
-    paused = false;
     
     while (!cu.isHalted()) {
-        if (paused) {
-            cin.ignore();
-            cin.get();
-            paused = false;
-            cu.setState("FETCH");
-        }
-        
         fetch();
         decode();
         execute();
-        
-        if (cu.isHalted()) break;
     }
-}
-
-void CPU::displayStatus() {
-    cout << "\n=== ESTADO DE REGISTROS ===" << endl;
-    pc.display();
-    icr.display();
-    acc.display();
-    mar.display();
-    mdr.display();
-    cu.display();
-    memory.display();
-    cout << "===========================" << endl;
-}
-
-void CPU::displayFinalStatus() {
-    cout << "\n=== ESTADO FINAL ===" << endl;
-    acc.display();
-    memory.display();
-    cout << "====================" << endl;
 }

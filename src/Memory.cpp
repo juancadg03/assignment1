@@ -1,4 +1,7 @@
 #include "Memory.h"
+#include <iostream>
+
+using namespace std;
 
 Memory::Memory() {
     for (int i = 0; i < MEMORY_SIZE; i++) {
@@ -22,18 +25,4 @@ int Memory::read(int address) const {
         cout << "Error: Dirección de memoria fuera de rango: " << address << endl;
     }
     return result;
-}
-
-void Memory::display() const {
-    cout << "\n=== CONTENIDO DE MEMORIA ===" << endl;
-    bool hasData = false;
-    for (int i = 0; i < MEMORY_SIZE; i++) {
-        if (data[i] != 0) {
-            cout << "D" << i << ": " << data[i] << endl;
-            hasData = true;
-        }
-    }
-    if (!hasData) {
-        cout << "(Memoria vacía)" << endl;
-    }
 }

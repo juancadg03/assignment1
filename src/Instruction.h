@@ -5,7 +5,6 @@
 
 using namespace std;
 
-// ==================== ESTRUCTURA DE INSTRUCCIÓN ====================
 struct Instruction {
     string opcode;
     string operand1;
